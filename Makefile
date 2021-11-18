@@ -11,3 +11,10 @@ server:
 
 client:
 	cd re-echo && make run_cli
+
+.PHONY:start, join
+
+start:
+	cd ter-msg && ./msg-ser.py
+join:
+	cd ter-msg && ./msg-cli.py
