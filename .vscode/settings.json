@@ -2,5 +2,6 @@
     "files.associations": {
         "types.h": "c",
         "socket.h": "c"
-    }
+    },
+    "python.formatting.provider": "yapf"
 }

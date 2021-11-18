@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 import socket
 from threading import Thread
+import time
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 host = socket.gethostname()
 port = 7788
 
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # 断开后防止端口被占用
 s.bind((host, port))
 s.listen(5) # 最多五个用户同时在线
 
@@ -22,12 +22,12 @@ def recv_msg(c, addr, name):
             c.close()
             break
         msg = msg.decode('utf-8')
-
+        # 退出指令 需要三次询问，帮助客户端 关闭发送 --> 关闭接收
         if msg == "exit":
             c.send("exit".encode('utf-8'))
             c.close()
             break
-        print(msg)
+        print(time.strftime("[%m-%d %H:%M:%S] "),msg) # 服务端终端打印
         # 将消息广播给其他主机
         for client in client_list:
             if client == c:
