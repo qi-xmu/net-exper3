@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -27,31 +28,37 @@ int main(int argc, char **argv)
     memset(server_addr.sin_zero, 0, sizeof(server_addr.sin_zero)); //零填充
 
     /* 连接服务器 */
-    if(connect(serverfd, (struct sockaddr *)&server_addr, sizeof(server_addr))<0)
+    if (connect(serverfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
     {
         perror("connect");
-        return -1;
+        assert(0);
     }
 
     while (1)
     {
         memset(recv_msg, 0, sizeof(recv_msg));
-        printf("SendMsg: ");
-        scanf("%s", send_msg);
-        if (strcmp(send_msg, "exit") == 0){
+        printf("> Input Msg: ");
+        char ch;
+        int i = 0;
+        while ((ch = getchar()) != '\n')
+            send_msg[i++] = ch;
+        send_msg[i++] = 0;
+
+        if (strcmp(send_msg, "bye") == 0)
+        {
             close(serverfd);
             break;
         }
-            
         printf("Sending: %s\n", send_msg);
-        if(send(serverfd, send_msg, strlen(send_msg), 0) <0){
+        if (send(serverfd, send_msg, strlen(send_msg), 0) < 0)
+        {
             perror("send");
-            return -1;
+            assert(0);
         };
 
         recv(serverfd, recv_msg, sizeof(recv_msg), 0);
         printf("Received: %s\n", recv_msg);
     }
-    
+
     return 0;
 }
