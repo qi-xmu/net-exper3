@@ -81,7 +81,6 @@ int main(int argc, char **argv)
         uint16_t cli_port = ntohs(client_addr.sin_port);
         printf("- Accept: %d.%d.%d.%d:%d\n", pa[0], pa[1], pa[2], pa[3], cli_port);
         
-        
         /* 创建子进程 */
         pid_t pid;
         if ((pid = fork()) < 0)
@@ -102,6 +101,7 @@ int main(int argc, char **argv)
                 reverse_str(recv_msg, sizeof(recv_msg));
                 /* 发送信息 */
                 send(clientfd, recv_msg, strlen(recv_msg), 0);
+                sleep(0.5);
             }
             close(clientfd);
             printf("- Exit %d.%d.%d.%d:%d\n", pa[0], pa[1], pa[2], pa[3], cli_port);

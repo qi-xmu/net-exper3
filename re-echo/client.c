@@ -36,9 +36,7 @@ int main(int argc, char **argv)
 
     pid_t pid;
     recv(serverfd, &pid, sizeof(pid_t), 0);
-    if (pid == 0) return -1;
-    else
-        printf("- PID: %d\n", pid);
+    printf("- PID: %d\n", pid);
     
     while (1)
     {

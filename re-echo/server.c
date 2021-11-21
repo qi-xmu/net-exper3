@@ -72,22 +72,23 @@ int main(int argc, char **argv)
         printf("Accept: %d\n", clientfd);
         char recv_msg[1024];
         /* 客户机连接后进行交互，占用整个进程 */
+        pid_t pid = 0;
+        send(clientfd, &pid, sizeof(pid_t), 0);
         while (1)
         {
             /* 接受信息 */
             memset(recv_msg, 0, sizeof(recv_msg));
             printf("Start Receiving...\n");
             if (recv(clientfd, recv_msg, sizeof(recv_msg), 0) <= 0)
-            {
-                perror("recv");
                 break;
-            }
+
             /* 处理信息,接受信息反转信息 */
             printf("Received: %s\n", recv_msg);
             reverse_str(recv_msg, sizeof(recv_msg));
             /* 发送信息 */
             send(clientfd, recv_msg, strlen(recv_msg), 0);
         }
+        perror("exit");
         close(clientfd);
     }
     close(serverfd);
