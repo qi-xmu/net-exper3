@@ -55,10 +55,7 @@ int main(int argc, char **argv)
         assert(0);
     }
     else
-    {
         printf("Bind Succeed.\n");
-    };
-
     /* 最大连接数 1 */
     if (listen(serverfd, 5) < 0)
         perror("Listen failed.\n");
@@ -71,11 +68,13 @@ int main(int argc, char **argv)
             perror("Accept failed.");
             assert(0);
         };
-
+        /* 显示连接的主机 */
         printf("Accept: %d\n", clientfd);
         char recv_msg[1024];
+        /* 客户机连接后进行交互，占用整个进程 */
         while (1)
         {
+            /* 接受信息 */
             memset(recv_msg, 0, sizeof(recv_msg));
             printf("Start Receiving...\n");
             if (recv(clientfd, recv_msg, sizeof(recv_msg), 0) <= 0)
@@ -83,7 +82,6 @@ int main(int argc, char **argv)
                 perror("recv");
                 break;
             }
-
             /* 处理信息,接受信息反转信息 */
             printf("Received: %s\n", recv_msg);
             reverse_str(recv_msg, sizeof(recv_msg));

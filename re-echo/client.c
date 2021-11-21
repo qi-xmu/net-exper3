@@ -30,35 +30,41 @@ int main(int argc, char **argv)
     /* 连接服务器 */
     if (connect(serverfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
     {
-        perror("connect");
-        assert(0);
+        perror("Connect");
+        return -1;
     }
 
+    pid_t pid;
+    recv(serverfd, &pid, sizeof(pid_t), 0);
+    if (pid == 0) return -1;
+    else
+        printf("- PID: %d\n", pid);
+    
     while (1)
     {
         memset(recv_msg, 0, sizeof(recv_msg));
+        /* 输入部分 */
         printf("> Input Msg: ");
         char ch;
         int i = 0;
         while ((ch = getchar()) != '\n')
             send_msg[i++] = ch;
         send_msg[i++] = 0;
-
+        /* 检测退出指令 */
         if (strcmp(send_msg, "bye") == 0)
-        {
-            close(serverfd);
             break;
-        }
-        printf("Sending: %s\n", send_msg);
+        
+        /* 发送信息 */
+        printf("- Sending: %s\n", send_msg);
         if (send(serverfd, send_msg, strlen(send_msg), 0) < 0)
         {
             perror("send");
-            assert(0);
+            return -1;
         };
-
+        /* 发送后监测接受信息 */
         recv(serverfd, recv_msg, sizeof(recv_msg), 0);
-        printf("Received: %s\n", recv_msg);
+        printf("> Received: %s\n", recv_msg);
     }
-
+    close(serverfd);
     return 0;
 }
