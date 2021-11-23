@@ -15,6 +15,6 @@ client:
 .PHONY:start, join
 
 start:
-	cd ter-msg && ./msg-ser.py
+	cd ter-msg && ./tcp-ser.py
 join:
-	cd ter-msg && ./msg-cli.py
+	cd ter-msg && ./tcp-cli.py
