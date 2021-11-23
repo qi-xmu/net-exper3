@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     else
         printf("Bind Succeed.\n");
     /* 最大连接数 1 */
-    if (listen(serverfd, 5) < 0)
+    if (listen(serverfd, 2) < 0)
         perror("Listen failed.\n");
 
     while (1)
